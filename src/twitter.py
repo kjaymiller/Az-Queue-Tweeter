@@ -1,8 +1,6 @@
 import typing
 import tweepy
 import os
-from uuid import uuid4
-import logging
 
 # Authenticate to Twitter
 access_token = os.environ.get("TWITTER_ACCESS_TOKEN")
