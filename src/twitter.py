@@ -1,3 +1,4 @@
+import logging
 import os
 import typing
 
@@ -22,8 +23,14 @@ class Auth:
         }
 
         for key, value in auth_keys.items():
-            if not value:
+            if value is None:
                 auth_keys[key] = os.environ.get(f"TWITTER_{key.upper()}")
+
+                if auth_keys[key] is None:
+                    logging.warning(
+                        f"{key} not passed or in environment variables. \
+                        Manually set {key} prior to using auth."
+                    )
 
         self.access_token = auth_keys["access_token"]
         self.access_token_secret = auth_keys["access_token_secret"]

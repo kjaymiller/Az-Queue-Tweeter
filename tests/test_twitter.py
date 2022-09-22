@@ -1,3 +1,5 @@
+import logging
+
 import pytest
 
 from src.twitter import Auth
@@ -18,5 +20,23 @@ def test_auth_from_environ(monkeypatch, env_key, class_key, env_val):
     monkeypatch.setenv(env_key, env_val)
 
     auth = Auth()
-    print(vars(auth))
     assert getattr(auth, class_key) == env_val
+
+
+@pytest.mark.parametrize(
+    "env_key,env_param",
+    [
+        ("TWITTER_ACCESS_TOKEN", "access_token"),
+        ("TWITTER_ACCESS_TOKEN_SECRET", "access_token_secret"),
+        ("TWITTER_CONSUMER_KEY", "consumer_key"),
+        ("TWITTER_CONSUMER_SECRET", "consumer_secret"),
+    ],
+)
+def test_empty_auth_warning_raised(caplog, monkeypatch, env_key, env_param):
+    """Tests that a warning is raised if a value is not found"""
+
+    caplog.set_level(logging.WARNING)
+    monkeypatch.delenv(env_key, raising=False)
+
+    auth = Auth()
+    assert any([env_param in x.message for x in caplog.records])
