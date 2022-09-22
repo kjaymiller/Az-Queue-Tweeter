@@ -10,3 +10,6 @@ Install Poetry by following the instructions on the [Poetry website](https://pyt
 
 
 **Once you have Poetry installed, you can install the project dependencies by running `poetry install` in the project root directory.**
+
+## Running the tests
+To run the tests, you can use the `pytest` command.
