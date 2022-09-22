@@ -1,6 +1,7 @@
-import typing
-import tweepy
 import os
+import typing
+
+import tweepy
 
 # Authenticate to Twitter
 access_token = os.environ.get("TWITTER_ACCESS_TOKEN")
@@ -29,13 +30,13 @@ client = tweepy.Client(
 def send_tweet(
     text: str,
     image_name: str,
-    image_data: typing.Optional[bytes]=None,
-    api: tweepy.API=api,
-    client: tweepy.Client=client,
+    image_data: typing.Optional[bytes] = None,
+    api: tweepy.API = api,
+    client: tweepy.Client = client,
 ):
     """
     Send a tweet with an image.
-    
+
     Note:
         if image_data is None, then it will try to open the image from the `image_name` path.
 
