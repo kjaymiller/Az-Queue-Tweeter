@@ -14,18 +14,21 @@ class Auth:
         consumer_secret: typing.Optional[str] = None,
     ):
 
-        for var in (
-            "access_token",
-            "access_token_secret",
-            "consumer_key",
-            "consumer_secret",
-        ):
-            if locals()[var] is None:
-                locals()[var] = os.environ.get(f"TWITTER_{var.upper()}")
-        self.access_token = access_token
-        self.access_token_secret = access_token_secret
-        self.consumer_key = consumer_key
-        self.consumer_secret = consumer_secret
+        auth_keys = {
+            "access_token": access_token,
+            "access_token_secret": access_token_secret,
+            "consumer_key": consumer_key,
+            "consumer_secret": consumer_secret,
+        }
+
+        for key, value in auth_keys.items():
+            if not value:
+                auth_keys[key] = os.environ.get(f"TWITTER_{key.upper()}")
+
+        self.access_token = auth_keys["access_token"]
+        self.access_token_secret = auth_keys["access_token_secret"]
+        self.consumer_key = auth_keys["consumer_key"]
+        self.consumer_secret = auth_keys["consumer_secret"]
 
     @property
     def auth(self):
@@ -53,7 +56,7 @@ def send_tweet(
     image_data: typing.Optional[bytes] = None,
     Auth: typing.Optional[Auth] = None,
     client: typing.Optional[tweepy.Client] = None,
-    api: typing.Optional[tweepy.Auth] = None,
+    api: typing.Optional[tweepy.API] = None,
     **kwargs,
 ):
     """
