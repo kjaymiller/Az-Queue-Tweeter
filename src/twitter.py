@@ -1,7 +1,7 @@
 import os
 import typing
 
-import tweepy
+import tweepy  # type:ignore[import]
 
 # Authenticate to Twitter
 access_token = os.environ.get("TWITTER_ACCESS_TOKEN")
