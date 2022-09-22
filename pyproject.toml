@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "azimagetweeter"
+version = "0.1.0"
+description = "Send images to Twitter using text from Azure Storage Queues"
+authors = ["Jay Miller <kjaymiller@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+azure-storage-queue = "^12.4.0"
+tweepy = "^4.10.1"
+Pillow = "^9.2.0"
+
+[tool.poetry.group.dev.dependencies]
+pytest-cov = "^3.0.0"
+black = "^22.8.0"
+isort = "^5.10.1"
+pytest = "^7.1.3"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
