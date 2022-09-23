@@ -2,6 +2,7 @@ import logging
 from unittest.mock import Mock
 
 import pytest
+from tweepy import API, Client
 
 import src
 from src.twitter import Auth, send_tweet
@@ -47,31 +48,90 @@ def test_empty_auth_warning_raised(caplog, monkeypatch, env_key, env_param):
 def test_Auth_has_api(test_auth):
     """assert that Auth has an api property. MyPy will enforce type"""
 
-    assert test_auth.api
+    assert test_auth.API
 
 
 def test_Auth_has_client(test_auth):
     """assert that Auth has an client property. MyPy will enforce type"""
 
-    assert test_auth.client
+    assert test_auth.Client
 
 
-def test_Auth_send_tweet_pulls_client_from_Auth(mocker, test_auth):
-    client = mocker.patch("src.twitter.tweepy.Client")
+def test_send_tweet_pulls_client_from_Auth(mocker, test_auth):
+    """tests if Auth is passed and client is not client is pulled from Auth"""
     mocker.patch(
         "src.twitter.tweepy.Client.create_tweet", return_value={"Response": 200}
     )
     send_tweet("test", auth=test_auth)
-    assert "access_token" in client.call_args.kwargs
+    src.twitter.tweepy.Client.create_tweet.assert_called_with("test")
 
 
-# def test_Auth_send_tweet_uploads_image_when_image_name_is_passed(mocker, test_auth):
-#     mocker.patch("src.twitter.tweepy.API.upload_media", return_value={"media_id": 1})
-#     mocker.patch("src.twitter.tweepy.Client.send_tweet", return_value={"Response": 200})
-#     send_tweet("test", image_name="test", auth=test_auth)
+def test_send_tweet_accepts_custom_client(mocker, test_auth):
+    """Tests that you can pass in a custom client"""
+    mocker.patch(
+        "src.twitter.tweepy.Client.create_tweet", return_value={"Response": 200}
+    )
+
+    send_tweet("test", client=test_auth.Client)
+    src.twitter.tweepy.Client.create_tweet.assert_called_with("test")
 
 
-# def test_Auth_send_tweet_pulls_api_from_Auth(mocker, test_auth):
-#     mocker.patch("src.twitter.tweepy.API.upload_media", return_value={"media_id": 1})
-#     mocker.patch("src.twitter.tweepy.Client.send_tweet", return_value={"Response": 200})
-#     send_tweet("test", auth=test_auth)
+@pytest.mark.skip("Not Sure how to Test")
+def test_send_tweet_accepts_custom_client_over_Auth(mocker, test_auth):
+    """Tests that a custom_client is used and not the Auth object"""
+    pass
+
+
+def test_passing_image_name_triggers_media_upload(mocker, test_auth, test_media):
+    """Tests that adding filename triggers media upload with that filename"""
+    media = mocker.patch("src.twitter.tweepy.API.media_upload", return_value=test_media)
+    mocker.patch(
+        "src.twitter.tweepy.Client.create_tweet", return_value={"Response": 200}
+    )
+
+    send_tweet("test", image_name="filepath", auth=test_auth)
+
+    assert media.call_args.kwargs["filename"] == "filename"
+
+
+def test_passing_image_name_triggers_media_upload(mocker, test_auth, test_media):
+    """Tests that adding filename triggers media upload with that filename"""
+    media = mocker.patch("src.twitter.tweepy.API.media_upload", return_value=test_media)
+    mocker.patch(
+        "src.twitter.tweepy.Client.create_tweet", return_value={"Response": 200}
+    )
+
+    send_tweet(
+        "test", image_name="filepath", image_data=b"passing_in_bytes", auth=test_auth
+    )
+
+    assert media.call_args.kwargs["file"] == b"passing_in_bytes"
+
+
+@pytest.mark.skip("#TODO: Build Test")
+def test_kwargs_passed_into_send_tweet():
+    pass
+
+
+def test_api_from_Auth(mocker, test_auth, test_media):
+    """tests if Auth is passed and api is not api is pulled from Auth"""
+    mocker.patch("src.twitter.tweepy.API.media_upload", return_value=test_media)
+    mocker.patch(
+        "src.twitter.tweepy.Client.create_tweet", return_value={"Response": 200}
+    )
+    send_tweet("test", image_name="filepath", auth=test_auth)
+
+    assert src.twitter.tweepy.API.media_upload.called_once()
+
+
+def test_send_tweet_from_custom_api(mocker, test_auth, test_media):
+    """tests if Auth is passed and api is not api is pulled from Auth"""
+    mocker.patch("src.twitter.tweepy.API.media_upload", return_value=test_media)
+    mocker.patch(
+        "src.twitter.tweepy.Client.create_tweet", return_value={"Response": 200}
+    )
+    send_tweet(
+        "test", image_name="filepath", api=test_auth.API, client=test_auth.Client
+    )
+
+    assert src.twitter.tweepy.API.media_upload.called_once()

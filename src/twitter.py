@@ -38,16 +38,17 @@ class Auth:
         self.consumer_secret = auth_keys["consumer_secret"]
 
     @property
-    def api(self) -> tweepy.OAuth1UserHandler:
-        return tweepy.OAuth1UserHandler(
+    def API(self) -> tweepy.OAuth1UserHandler:
+        auth = tweepy.OAuth1UserHandler(
             consumer_key=self.consumer_key,
             consumer_secret=self.consumer_secret,
             access_token=self.access_token,
             access_token_secret=self.access_token_secret,
         )
+        return tweepy.API(auth)
 
     @property
-    def client(self) -> tweepy.Client:
+    def Client(self) -> tweepy.Client:
         return tweepy.Client(
             consumer_key=self.consumer_key,
             consumer_secret=self.consumer_secret,
@@ -79,13 +80,13 @@ def send_tweet(
     """
 
     if not client:
-        client = auth.client
+        client = auth.Client
 
     if not image_name:
         return client.create_tweet(text, **kwargs)
 
-    if not auth:
-        auth = Auth.auth
-    api = tweepy.API(auth)
+    if not api:
+        api = auth.API
+
     media = api.media_upload(filename=image_name, file=image_data)
     return client.create_tweet(text=text, media_ids=[media.media_id], **kwargs)
