@@ -1,14 +1,25 @@
+import logging
 import os
+import typing
 
-from azure.storage.queue import QueueClient
-
-conn_string = os.environ.get("AZURE_STORAGE_CONNECTION_STRING")
+import azure.storage.queue
 
 
-def load_queue(connection_string: str, name: str, **kwargs) -> QueueClient:
-    """
-    source: https://learn.microsoft.com/en-us/azure/storage/queues/storage-python-how-to-use-queue-storage?tabs=python%2Cenvironment-variable-windows
-    **kwargs are passed to the QueueClient connection and should be valid kwargs for the QueueClient
-    """
-    # Create a unique name for the queue
-    return QueueClient.from_connection_string(connection_string, name, **kwargs)
+class Auth:
+    def __init__(
+        self, *, connection_string: typing.Optional[str] = None, queue_name: str
+    ):
+        if connection_string is None:
+            connection_string = os.environ.get("AZURE_STORAGE_CONNECTION_STRING")
+            if connection_string is None:
+                logging.warning(
+                    "connection_string not passed or in AZURE_STORAGE_CONNECTION_STRING environment variable."
+                )
+        self.connection_string = connection_string
+        self.queue_name = queue_name
+
+    @property
+    def Client(self) -> azure.storage.queue.QueueClient:
+        return azure.storage.queue.QueueClient.from_connection_string(
+            self.connection_string, self.queue_name
+        )

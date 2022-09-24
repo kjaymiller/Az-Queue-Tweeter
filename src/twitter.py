@@ -55,38 +55,3 @@ class Auth:
             access_token=self.access_token,
             access_token_secret=self.access_token_secret,
         )
-
-
-# Create a tweet
-def send_tweet(
-    text: str,
-    image_name: typing.Optional[str] = None,
-    image_data: typing.Optional[bytes] = None,
-    auth: typing.Optional[Auth] = None,
-    client: typing.Optional[tweepy.Client] = None,
-    api: typing.Optional[tweepy.API] = None,
-    **kwargs,
-):
-    """
-    Send a tweet with an image.
-
-    **kwargs are passed to [tweepy.Client.send_tweet](https://docs.tweepy.org/en/latest/api.html#tweepy.Client.send_tweet)
-
-    Note:
-        if image_data is None, then it will try to open the image from the `image_name` path.
-
-    Note:
-        if api and client are None, then it will look for `TWITTER_ACCESS_TOKEN`, `TWITTER_ACCESS_SECRET`, `TWITTER_CONSUMER_KEY`, `TWITTER_CONSUMER_SECRET` in the environment variables.
-    """
-
-    if not client:
-        client = auth.Client
-
-    if not image_name:
-        return client.create_tweet(text, **kwargs)
-
-    if not api:
-        api = auth.API
-
-    media = api.media_upload(filename=image_name, file=image_data)
-    return client.create_tweet(text=text, media_ids=[media.media_id], **kwargs)
