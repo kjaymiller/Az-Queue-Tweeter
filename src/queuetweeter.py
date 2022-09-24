@@ -23,13 +23,14 @@ class QueueTweeter():
         # Must be a dict containing arguments from
         # https://docs.tweepy.org/en/stable/client.html#tweepy.Client.create_tweet
         # Or "file" (byte array) which will be uploaded w/Twitter API v1
-        tweet_args = message_transformer(next_message)
+        tweet_args = message_transformer(next_message["content"])
         if tweet_args.get("file"):
              media = self.twitterv1.media_upload(file=tweet_args["file"])
              tweet_args["media_ids"] = [media.media_id]
              del tweet_args["file"]
 
         # Send the tweet
+        print(tweet_args)
         self.twitterv2.create_tweet(**tweet_args)
 
         # Delete from queue if desired
