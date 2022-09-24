@@ -34,14 +34,12 @@ def test_media():
     return Media(123457890, "123457890")
 
 
-class MockItemPaged:
-    def next(self):
-        return azure.storage.queue.QueueMessage(content="test")
-
-
 class MockQueue:
-    def receive_messages(self):
-        return MockItemPaged()
+    def peek_messages(self):
+        return [azure.storage.queue.QueueMessage(content="test")]
+
+    def receive_message(self):
+        return azure.storage.queue.QueueMessage(content="test")
 
     def send_message(self, txt):
         pass

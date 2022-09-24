@@ -17,9 +17,12 @@ class QueueTweeter:
             "text": message
         },
         delete_after: typing.Optional[bool] = True,
+        preview_mode: typing.Optional[bool] = False,
     ):
-
-        next_message = self.queue.receive_messages().next()
+        if preview_mode:
+            next_message = self.queue.peek_messages()[0]
+        else:
+            next_message = self.queue.receive_message()
 
         # Turns queue message into tweet arguments
         # Must be a dict containing arguments from
@@ -32,11 +35,14 @@ class QueueTweeter:
             del tweet_args["file"]
 
         # Send the tweet
-        self.twitterv2.create_tweet(**tweet_args)
+        if preview_mode:
+            print(f"This would send tweet with {tweet_args}")
+        else:
+            self.twitterv2.create_tweet(**tweet_args)
 
         # Delete from queue if desired
-        if delete_after:
+        if not preview_mode and delete_after:
             self.queue.delete_message(next_message.id, next_message.pop_receipt)
 
     def queue_message(self, message):
-        self.queue_client.send_message(message)
+        self.queue.send_message(message)

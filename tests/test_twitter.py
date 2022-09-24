@@ -45,13 +45,13 @@ def test_empty_auth_warning_raised(caplog, monkeypatch, env_key, env_param):
     assert any([env_param in x.message for x in caplog.records])
 
 
-def test_Auth_has_api(test_auth):
+def test_Auth_has_api(test_twitter_auth):
     """assert that Auth has an api property. MyPy will enforce type"""
 
-    assert test_auth.API
+    assert test_twitter_auth.API
 
 
-def test_Auth_has_client(test_auth):
+def test_Auth_has_client(test_twitter_auth):
     """assert that Auth has an client property. MyPy will enforce type"""
 
-    assert test_auth.Client
+    assert test_twitter_auth.Client

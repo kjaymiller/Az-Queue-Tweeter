@@ -43,7 +43,7 @@ def test_empty_auth_warning_raised(caplog, monkeypatch, env_key, env_param):
     assert any([env_param in x.message for x in caplog.records])
 
 
-def test_Auth_has_client(test_auth):
+def test_Auth_has_client(mocker, test_storage_auth):
     """assert that Auth has a Client property. MyPy will enforce type"""
-
-    assert test_auth.Client
+    mocker.patch.object(Auth, "Client", object)
+    assert test_storage_auth.Client
