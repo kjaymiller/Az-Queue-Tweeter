@@ -1,7 +1,8 @@
 import typing
+from typing import Callable
 
-import twitter
-import storage
+from . import twitter
+from . import storage
 
 
 class QueueTweeter():
@@ -13,7 +14,7 @@ class QueueTweeter():
         self.twitterv2 = twitter_auth.Client
 
     def send_next_message(self,
-        message_transformer=lambda message:{"text":message},
+        message_transformer:typing.Optional[Callable[[str],dict]] = lambda message:{"text":message},
         delete_after:typing.Optional[bool] = True
         ):
 
@@ -30,12 +31,11 @@ class QueueTweeter():
              del tweet_args["file"]
 
         # Send the tweet
-        print(tweet_args)
         self.twitterv2.create_tweet(**tweet_args)
 
         # Delete from queue if desired
         if delete_after:
             self.queue.delete_message(next_message.id, next_message.pop_receipt)
 
-    def queue_text_message(self, message):
+    def queue_message(self, message):
         self.queue_client.send_message(message)
