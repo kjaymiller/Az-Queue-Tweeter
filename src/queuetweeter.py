@@ -1,22 +1,23 @@
 import typing
 from typing import Callable
 
-from . import twitter
-from . import storage
+from . import storage, twitter
 
 
-class QueueTweeter():
-
-    def __init__(self, storage_auth:storage.Auth, twitter_auth:twitter.Auth):
+class QueueTweeter:
+    def __init__(self, storage_auth: storage.Auth, twitter_auth: twitter.Auth):
         self.twitter_auth = twitter_auth
         self.queue = storage_auth.Client
         self.twitterv1 = twitter_auth.API
         self.twitterv2 = twitter_auth.Client
 
-    def send_next_message(self,
-        message_transformer:typing.Optional[Callable[[str],dict]] = lambda message:{"text":message},
-        delete_after:typing.Optional[bool] = True
-        ):
+    def send_next_message(
+        self,
+        message_transformer: typing.Optional[Callable[[str], dict]] = lambda message: {
+            "text": message
+        },
+        delete_after: typing.Optional[bool] = True,
+    ):
 
         next_message = self.queue.receive_messages().next()
 
@@ -26,9 +27,9 @@ class QueueTweeter():
         # Or "file" (byte array) which will be uploaded w/Twitter API v1
         tweet_args = message_transformer(next_message["content"])
         if tweet_args.get("file"):
-             media = self.twitterv1.media_upload(file=tweet_args["file"])
-             tweet_args["media_ids"] = [media.media_id]
-             del tweet_args["file"]
+            media = self.twitterv1.media_upload(file=tweet_args["file"])
+            tweet_args["media_ids"] = [media.media_id]
+            del tweet_args["file"]
 
         # Send the tweet
         self.twitterv2.create_tweet(**tweet_args)

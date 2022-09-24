@@ -11,7 +11,11 @@ from src.storage import Auth
 @pytest.mark.parametrize(
     "env_key,class_key,env_val",
     [
-        ("AZURE_STORAGE_CONNECTION_STRING", "connection_string", "test_connection_string"),
+        (
+            "AZURE_STORAGE_CONNECTION_STRING",
+            "connection_string",
+            "test_connection_string",
+        ),
     ],
 )
 def test_auth_from_environ(monkeypatch, env_key, class_key, env_val):
@@ -19,7 +23,7 @@ def test_auth_from_environ(monkeypatch, env_key, class_key, env_val):
 
     monkeypatch.setenv(env_key, env_val)
 
-    auth = Auth(queue_name='message-queue')
+    auth = Auth(queue_name="message-queue")
     assert getattr(auth, class_key) == env_val
 
 
@@ -35,7 +39,7 @@ def test_empty_auth_warning_raised(caplog, monkeypatch, env_key, env_param):
     caplog.set_level(logging.WARNING)
     monkeypatch.delenv(env_key, raising=False)
 
-    auth = Auth(queue_name='message-queue')
+    auth = Auth(queue_name="message-queue")
     assert any([env_param in x.message for x in caplog.records])
 
 
