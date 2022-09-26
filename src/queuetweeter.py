@@ -27,12 +27,20 @@ class QueueTweeter:
         # Turns queue message into tweet arguments
         # Must be a dict containing arguments from
         # https://docs.tweepy.org/en/stable/client.html#tweepy.Client.create_tweet
-        # Or "file" (byte array) which will be uploaded w/Twitter API v1
+        # Or "file" (byte array)/"filename" (str) to be uploaded w/Twitter API v1
         tweet_args = message_transformer(next_message["content"])
-        if tweet_args.get("file"):
-            media = self.twitterv1.media_upload(file=tweet_args["file"])
-            tweet_args["media_ids"] = [media.media_id]
+
+        if (file := tweet_args.get("file")) and (
+            filename := tweet_args.get("filename")
+        ):
+            if preview_mode:
+                print(f"The {filename} file with contents {file} would get uploaded.")
+                tweet_args["media_ids"] = ["UPLOADED-ID"]
+            else:
+                media = self.twitterv1.media_upload(file=file, filename=filename)
+                tweet_args["media_ids"] = [media.media_id]
             del tweet_args["file"]
+            del tweet_args["filename"]
 
         # Send the tweet
         if preview_mode:
