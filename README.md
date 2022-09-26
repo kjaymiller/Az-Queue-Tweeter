@@ -28,6 +28,7 @@ You'll need a few more details for Twitter authentication:
 
 ```
 from azqueuetweeter import twitter
+
 ta = twitter.Auth(
     consumer_key='CONSUMER-KEY',
     consumer_secret='CONSUMER-SECRET',
@@ -72,6 +73,7 @@ Now you have the `access_token` and `access_token_secret` needed for the `twitte
 Construct a `QueueTweeter` using the authentication objects:
 
 ```
+from azqueuetweeter import QueueTweeter
 qt = QueueTweeter(storage_auth=sa, twitter_auth=ta)
 ```
 
