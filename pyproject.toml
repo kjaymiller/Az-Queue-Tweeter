@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "azqueuetweeter"
-version = "0.1.0"
+version = "0.1.1"
 description = "Tweet from Azure Storage Queues"
 authors = ["Jay Miller <kjaymiller@gmail.com>", "Pamela Fox <pamela.fox@gmail.com>"]
 license = "MIT"
