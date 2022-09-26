@@ -91,7 +91,7 @@ You might also find it useful to queue up stringified JSON:
 
 ```
 import json
-qt.queue_message(json.dumps({"text": "when were f strings introduced?", "poll_options": ["3.6", "3.7", "3.8"], "poll_duration_minutes": 60*24}))
+qt.queue_message(json.dumps({"text": "Whats your fav Python web framework?", "poll_options": ["Flask", "Django", "FastAPI", "All of em!"], "poll_duration_minutes": 60*24}))
 ```
 
 Later, you can transform your queued messages into tweet content, so you can store the information in the queue however works for you.
@@ -126,7 +126,7 @@ This example deserializes a serialized JSON string message:
 ```
 import json
 
-qt.queue_message(json.dumps({"text": "when were f strings introduced?", "poll_options": ["3.6", "3.7", "3.8"], "poll_duration_minutes": 60*24}))
+qt.queue_message(json.dumps({"text": "Whats your fav Python web framework?", "poll_options": ["Flask", "Django", "FastAPI", "All of em!"], "poll_duration_minutes": 60*24}))
 qt.send_next_message(message_transformer=lambda msg: json.loads(msg))
 ```
 
