@@ -10,7 +10,6 @@ readme = "README.md"
 python = "^3.8.14"
 azure-storage-queue = "^12.4.0"
 tweepy = "^4.10.1"
-tox-asdf = "^0.1.0"
 
 [tool.poetry.group.dev.dependencies]
 pytest-cov = "^3.0.0"
@@ -39,18 +38,16 @@ pythonpath = ['src']
 [tool.tox]
 legacy_tox_ini = """
 [tox]
-envlist = py38,py39,py310
+envlist = python3.8,python3.9,python3.10
 isolated_build = True
 
 [testenv]
 deps =
-    poetry
     pytest
     pytest-cov
     pytest-mock
-commands = poetry run pytest --cov src/azqueuetweeter tests/
+commands = pytest --cov src/azqueuetweeter tests/
 
 [tox:.package]
 basepython = python3
-
 """
