@@ -1,8 +1,8 @@
 [tool.poetry]
-name = "azimagetweeter"
+name = "azqueuetweeter"
 version = "0.1.0"
-description = "Send images to Twitter using text from Azure Storage Queues"
-authors = ["Jay Miller <kjaymiller@gmail.com>"]
+description = "Tweet from Azure Storage Queues"
+authors = ["Jay Miller <kjaymiller@gmail.com>", "Pamela Fox <pamela.fox@gmail.com>"]
 license = "MIT"
 readme = "README.md"
 
@@ -10,7 +10,6 @@ readme = "README.md"
 python = "^3.10"
 azure-storage-queue = "^12.4.0"
 tweepy = "^4.10.1"
-Pillow = "^9.2.0"
 
 [tool.poetry.group.dev.dependencies]
 pytest-cov = "^3.0.0"
