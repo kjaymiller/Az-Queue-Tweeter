@@ -3,7 +3,7 @@ from dataclasses import dataclass
 import azure.storage.queue
 import pytest
 
-from src import queuetweeter, storage, twitter
+from azqueuetweeter import QueueTweeter, storage, twitter
 
 
 @pytest.fixture(scope="session")
@@ -51,6 +51,4 @@ class MockQueue:
 @pytest.fixture()
 def test_queue_tweeter(mocker, test_storage_auth, test_twitter_auth):
     mocker.patch.object(storage.Auth, "Client", MockQueue())
-    return queuetweeter.QueueTweeter(
-        storage_auth=test_storage_auth, twitter_auth=test_twitter_auth
-    )
+    return QueueTweeter(storage_auth=test_storage_auth, twitter_auth=test_twitter_auth)

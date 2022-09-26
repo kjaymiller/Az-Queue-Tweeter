@@ -4,8 +4,8 @@ from unittest.mock import Mock
 import pytest
 from tweepy import API, Client
 
-import src
-from src.storage import Auth
+import azqueuetweeter
+from azqueuetweeter.storage import Auth
 
 
 @pytest.mark.parametrize(

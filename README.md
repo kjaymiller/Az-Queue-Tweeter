@@ -13,7 +13,7 @@ with `os.environ.get('ENV_NAME')`.
 Here's what you'll need for Azure storage authentication:
 
 ```
-from src import storage
+from azqueuetweeter import storage
 
 sa = storage.Auth(connection_string="CONNECTION-STRING", queue_name="YOUR-QUEUE-NAME")
 ```
@@ -27,7 +27,8 @@ using the Azure client library, or more easily, using the [Azure Storage Explore
 You'll need a few more details for Twitter authentication:
 
 ```
-from src import twitter
+from azqueuetweeter import twitter
+
 ta = twitter.Auth(
     consumer_key='CONSUMER-KEY',
     consumer_secret='CONSUMER-SECRET',
@@ -72,7 +73,8 @@ Now you have the `access_token` and `access_token_secret` needed for the `twitte
 Construct a `QueueTweeter` using the authentication objects:
 
 ```
-qt = queuetweeter.QueueTweeter(storage_auth=sa, twitter_auth=ta)
+from azqueuetweeter import QueueTweeter
+qt = QueueTweeter(storage_auth=sa, twitter_auth=ta)
 ```
 
 ### Queue up messages
