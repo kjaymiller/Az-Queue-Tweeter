@@ -34,7 +34,6 @@ testpaths = [
 pythonpath = ['src']
 
 
-# content of: tox.ini , put in same dir as setup.py
 [tool.tox]
 legacy_tox_ini = """
 [tox]
