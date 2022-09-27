@@ -1,4 +1,4 @@
-# AZImageTweeter
+# AZ-Queue-Tweeter
 
 Send images to Twitter using text from Azure Queue Storage
 
