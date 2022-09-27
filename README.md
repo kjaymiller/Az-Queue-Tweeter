@@ -2,6 +2,11 @@
 
 Send images to Twitter using text from Azure Queue Storage
 
+## Installation
+
+Install via PyPI
+`pip install azqueuetweeter`
+
 ## Usage instructions
 
 ### Setup Azure authentication:
